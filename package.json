@@ -1,27 +1,27 @@
 {
   "name": "redux-essentials",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Redux Essentials",
-  "main": "dist/index.js",
+  "main": "./cjs/index.js",
   "exports": {
-    ".": "./lib/index.mjs",
-    "./": "./lib/",
-    "./actions": "./lib/actions.mjs",
-    "./index": "./lib/index.mjs",
-    "./object": "./lib/object.mjs",
-    "./reducers": "./lib/reducers.mjs",
-    "./dist": "./dist/index.js",
-    "./dist/": "./dist/"
+    ".": {
+      "import": "./esm/index.mjs",
+      "require": "./cjs/index.js"
+    },
+    "./": {
+      "import": "./esm/",
+      "require": "./cjs/"
+    }
   },
   "files": [
-    "dist/*",
-    "lib/*"
+    "esm/*",
+    "cjs/*"
   ],
-  "types": "./lib/index.d.ts",
+  "types": "./esm/index.d.ts",
   "scripts": {
     "lint": "eslint --ext .js --ext .mjs .",
-    "dist": "cross-env NODE_ENV=production webpack",
-    "prepublish": "npm run dist",
+    "transpile": "rm -rf cjs && babel esm --out-dir cjs --ignore \"**/*.test.mjs\" --source-maps",
+    "prepare": "npm run transpile",
     "test": "jest --coverage --no-cache"
   },
   "repository": {
@@ -42,10 +42,13 @@
     "node": ">=10"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "babel-plugin-module-extension": "^0.1.1",
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "^3.6.4",
     "cross-env": "^7.0.0",

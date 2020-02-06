@@ -1,4 +1,6 @@
-import { del, get, set } from './object.mjs';
+import { del } from './immutable/del.mjs';
+import { get } from './immutable/get.mjs';
+import { set } from './immutable/set.mjs';
 import { ADD_VALUE, DEL_VALUE, MOVE_VALUE, SET_VALUE } from './actions.mjs';
 
 export function values(state = {}, action) {

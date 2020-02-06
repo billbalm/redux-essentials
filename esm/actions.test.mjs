@@ -1,4 +1,4 @@
-import { addValue, delValue, setValue } from './actions';
+import { addValue, delValue, setValue } from './actions.mjs';
 
 describe('addValue', function() {
   it('creates action as expected', function() {

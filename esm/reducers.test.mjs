@@ -1,5 +1,5 @@
-import { addValue, delValue, moveValue, setValue } from './actions';
-import { values } from './reducers';
+import { addValue, delValue, moveValue, setValue } from './actions.mjs';
+import { values } from './reducers.mjs';
 
 describe('values', function() {
   it('creates new state at first', function() {

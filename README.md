@@ -12,10 +12,9 @@ It creates a `values` entry in the state that can be mutated via 4 actions:
 - `MOVE_VALUE`: moves an element within an array
 - `SET VALUE`: sets a value at a give path
 
-Action object are created by calling the methods in the `actions` module/export.
+Action objects are created by calling the methods in the `actions` module.
 
-The state is proper immutable. The `object` module/export is used to mutate the
-state object without actually changing it.
+The state is treated as proper immutable by this library.
 
 ## Example
 
