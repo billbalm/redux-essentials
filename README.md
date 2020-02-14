@@ -11,6 +11,7 @@ It creates a `values` entry in the state that can be mutated via 4 actions:
 - `DEL VALUE`: deletes an object property or removes an element from an array
 - `MOVE_VALUE`: moves an element within an array
 - `SET VALUE`: sets a value at a give path
+- `BATCH`: can be used to dispatch multiple actions at once
 
 Action objects are created by calling the methods in the `actions` module.
 
@@ -21,7 +22,7 @@ The state is treated as proper immutable by this library.
 ```js
 import assert from 'assert';
 import { combineReducers, createStore } from 'redux';
-import { actions, reducers } from './redux-essentials';
+import { actions, reducers } from 'redux-essentials';
 
 // creates a brand new store
 const store = createStore(combineReducers(reducers));
@@ -35,11 +36,14 @@ assert.equal(store.getState().values.cat.name, 'Melinda');
 // set a value of type array deep in the state
 store.dispatch(actions.setValue(['cat', 'food'], []));
 
-// append some values to the array
-store.dispatch(actions.addValue(['cat', 'food'], 'biscuit'));
-store.dispatch(actions.addValue(['cat', 'food'], 'meat'));
-// insert a value at a specific position in the array
-store.dispatch(actions.addValue(['cat', 'food'], 'fish', 1));
+// actions batch
+store.dispatch(batch([
+  // append some values to the array
+  actions.addValue(['cat', 'food'], 'biscuit'),
+  actions.addValue(['cat', 'food'], 'meat'),
+  // insert a value at a specific position in the array
+  actions.addValue(['cat', 'food'], 'fish', 1)),
+]));
 
 // throw if food isn't an array exactly like expected
 assert.deepEqual(store.getState().values.cat.food, ['biscuit','fish','meat']);

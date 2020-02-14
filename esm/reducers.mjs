@@ -1,10 +1,17 @@
 import { del } from './immutable/del.mjs';
 import { get } from './immutable/get.mjs';
 import { set } from './immutable/set.mjs';
-import { ADD_VALUE, DEL_VALUE, MOVE_VALUE, SET_VALUE } from './actions.mjs';
+import { BATCH, ADD_VALUE, DEL_VALUE, MOVE_VALUE, SET_VALUE } from './actions.mjs';
 
 export function values(state = {}, action) {
   switch (action && action.type) {
+  case BATCH: {
+    const { payload } = action;
+    if (Array.isArray(payload)) {
+      return payload.reduce((state, action) => values(state, action), state);
+    }
+    return state;
+  }
   case ADD_VALUE: {
     const { payload: { index, path, value } } = action;
     const array = get(state, path, []);

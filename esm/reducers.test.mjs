@@ -1,4 +1,4 @@
-import { addValue, delValue, moveValue, setValue } from './actions.mjs';
+import { batch, addValue, delValue, moveValue, setValue } from './actions.mjs';
 import { values } from './reducers.mjs';
 
 describe('values', function() {
@@ -277,12 +277,12 @@ describe('values', function() {
         a: { a: { a: 'AAA' }, b: { a: 'ABA', b: 'ABB' } },
         b: { a: { a: 'BAA' } },
       };
-      const newState = values(state, setValue(['b', 'b', 'a'], 'BBA:Modified'));
+      const newState = values(state, setValue(['b', 'b', 'a'], 'BBA'));
       expect(newState).not.toBe(state);
       expect(newState.a).toBe(state.a);
       expect(newState.b).not.toBe(state.b);
       expect(newState.b.a).toBe(state.b.a);
-      expect(newState.b.b).toEqual({ a: 'BBA:Modified' });
+      expect(newState.b.b).toEqual({ a: 'BBA' });
     });
     it('changes state as expected with inexistent path', function() {
       const state = {
@@ -297,6 +297,37 @@ describe('values', function() {
       expect(newState.a.b).toBeDefined();
       expect(newState.a.b.a).toEqual('ABA');
       expect(newState.b).toBe(state.b);
+    });
+  });
+  describe('action batch', function() {
+    it('changes state as expected', function() {
+      const state = {
+        a: { a: { a: 'AAA' }, b: { a: 'ABA', b: 'ABB' } },
+        b: { a: { a: 'BAA' } },
+      };
+      const newState = values(state, batch([
+        setValue(['a', 'b', 'a'], 'ABA:Modified'),
+        setValue(['b', 'b', 'a'], 'BBA'),
+        delValue(['a', 'a', 'a']),
+      ]));
+      expect(newState).not.toBe(state);
+      expect(newState.a).not.toBe(state.a);
+      expect(newState.a.a).not.toBe(state.a.a);
+      expect(newState.a.a.a).toBeUndefined();
+      expect(newState.a.b).not.toBe(state.a.b);
+      expect(newState.a.b.a).toEqual('ABA:Modified');
+      expect(newState.b).not.toBe(state.b);
+      expect(newState.b.a).toBe(state.b.a);
+      expect(newState.b.b).toEqual({ a: 'BBA' });
+    });
+    it('does not change state if payload is not an array', function() {
+      const state = { a: { a: { a: 'AAA' } } };
+      expect(values(state, batch({}))).toBe(state);
+    });
+    it('does not change state with unknown action types', function() {
+      const state = { a: { a: { a: 'AAA' } } };
+      const actual = values(state, batch([{ type: 'UNKNOWN' }, { type: 'STRANGE' }]));
+      expect(actual).toBe(state);
     });
   });
   it('does not change state with unknown action type', function() {
