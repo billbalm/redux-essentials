@@ -56,7 +56,10 @@ export function values(state = {}, action) {
   }
   case SET_VALUE: {
     const { payload: { path, value } } = action;
-    return set(state, path, value);
+    if (path && path.length) {
+      return set(state, path, value);
+    }
+    return [null, undefined].includes(value) ? state : value;
   }
   default:
     return state;

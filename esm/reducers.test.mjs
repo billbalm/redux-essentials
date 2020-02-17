@@ -298,6 +298,25 @@ describe('values', function() {
       expect(newState.a.b.a).toEqual('ABA');
       expect(newState.b).toBe(state.b);
     });
+    it('changes state as expected with empty path', function() {
+      const state = {
+        a: { a: { a: 'AAA' }, b: { a: 'ABA', b: 'ABB' } },
+        b: { a: { a: 'BAA' } },
+      };
+      const newState = values(state, setValue([], { a: 'A' }));
+      expect(newState).not.toBe(state);
+      expect(newState.a).not.toBe(state.a);
+      expect(newState.a).toEqual('A');
+      expect(newState.b).toBeUndefined();
+    });
+    it('does not change state with no path nor value', function() {
+      const state = {
+        a: { a: { a: 'AAA' }, b: { a: 'ABA', b: 'ABB' } },
+        b: { a: { a: 'BAA' } },
+      };
+      const newState = values(state, setValue());
+      expect(newState).toBe(state);
+    });
   });
   describe('action batch', function() {
     it('changes state as expected', function() {

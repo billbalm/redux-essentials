@@ -1,6 +1,6 @@
 {
   "name": "redux-essentials",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Redux Essentials",
   "main": "./cjs/index.js",
   "exports": {
