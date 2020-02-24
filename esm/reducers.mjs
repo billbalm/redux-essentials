@@ -55,9 +55,9 @@ export function values(state = {}, action) {
     return state;
   }
   case SET_VALUE: {
-    const { payload: { path, value } } = action;
+    const { payload: { merge, path, value } } = action;
     if (path && path.length) {
-      return set(state, path, value);
+      return set(state, path, value, merge);
     }
     return [null, undefined].includes(value) ? state : value;
   }

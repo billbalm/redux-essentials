@@ -20,8 +20,14 @@ describe('delValue', function() {
 
 describe('setValue', function() {
   it('creates action as expected', function() {
+    expect(setValue('some-path', 'some-value', true)).toEqual({
+      payload: { merge: true, path: 'some-path', value: 'some-value' },
+      type: 'SET VALUE',
+    });
+  });
+  it('creates action as expected with default merge option', function() {
     expect(setValue('some-path', 'some-value')).toEqual({
-      payload: { path: 'some-path', value: 'some-value' },
+      payload: { merge: false, path: 'some-path', value: 'some-value' },
       type: 'SET VALUE',
     });
   });

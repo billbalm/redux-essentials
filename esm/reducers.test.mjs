@@ -275,14 +275,29 @@ describe('values', function() {
     it('changes state as expected', function() {
       const state = {
         a: { a: { a: 'AAA' }, b: { a: 'ABA', b: 'ABB' } },
-        b: { a: { a: 'BAA' } },
+        b: { a: { a: 'BAA' }, b: { a: 'BBA' } },
       };
-      const newState = values(state, setValue(['b', 'b', 'a'], 'BBA'));
+      const newState = values(state, setValue(['b', 'b', 'a'], 'BBA:Modified'));
       expect(newState).not.toBe(state);
       expect(newState.a).toBe(state.a);
       expect(newState.b).not.toBe(state.b);
       expect(newState.b.a).toBe(state.b.a);
-      expect(newState.b.b).toEqual({ a: 'BBA' });
+      expect(newState.b.b).not.toBe(state.b.b);
+      expect(newState.b.b.a).toEqual('BBA:Modified');
+    });
+    it('changes state as expected with merge option', function() {
+      const state = {
+        a: { a: { a: 'AAA' }, b: { a: 'ABA', b: 'ABB' } },
+        b: { a: { a: 'BAA' }, b: { a: 'BBA' } },
+      };
+      const newState = values(state, setValue(['b', 'b'], { b: 'BBB' }, true));
+      expect(newState).not.toBe(state);
+      expect(newState.a).toBe(state.a);
+      expect(newState.b).not.toBe(state.b);
+      expect(newState.b.a).toBe(state.b.a);
+      expect(newState.b.b).not.toBe(state.b.b);
+      expect(newState.b.b.a).toEqual('BBA');
+      expect(newState.b.b.b).toEqual('BBB');
     });
     it('changes state as expected with inexistent path', function() {
       const state = {

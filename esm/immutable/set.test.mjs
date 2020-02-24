@@ -19,6 +19,24 @@ describe('set', function() {
     expect(actual.a.b[0].b).toBe(object.a.b[0].b);
     expect(actual.b).toBe(object.b);
   });
+  it('sets value as expected with merge option', function() {
+    const object = {
+      a: { a: { a: 'AAA' }, b: [{ a: 'AB1A', b: 'AB1B' }, { a: 'AB2A' }] },
+      b: { a: { a: 'BAA' } },
+    };
+    const actual = set(object, ['a', 'b', 0], { a: 'AB1A:Modified' }, true);
+    expect(actual).not.toBe(object);
+    expect(actual.a).not.toBe(object.a);
+    expect(actual.a.a).toBe(object.a.a);
+    expect(actual.a.b).not.toBe(object.a.b);
+    expect(actual.a.b).toBeInstanceOf(Array);
+    expect(actual.a.b[0]).not.toBe(object.a.b[0]);
+    expect(actual.a.b[1]).toBe(object.a.b[1]);
+    expect(actual.a.b[0].a).not.toEqual(object.a.b[0].a);
+    expect(actual.a.b[0].a).toEqual('AB1A:Modified');
+    expect(actual.a.b[0].b).toBe(object.a.b[0].b);
+    expect(actual.b).toBe(object.b);
+  });
   it('creates intermediate props to set value', function() {
     const object = {
       a: { a: { a: 'AAA' } },
